@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block titulo %}Página no encontrada — Cuadernillo{% endblock %}
+
+{% block contenido %}
+<article class="portada">
+  <p class="antetitulo">Error 404</p>
+  <h1 class="portada__titulo">Esa página<br>no existe</h1>
+  <p class="portada__entrada">
+    El cuestionario tiene {{ total }} preguntas numeradas del 1 al {{ total }}.
+  </p>
+  <p class="acciones">
+    <a class="boton" href="{{ url_for('portada') }}">Volver al índice</a>
+  </p>
+</article>
+{% endblock %}

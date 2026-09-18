@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block titulo %}Cuadernillo de Arquitecturas{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/editorial.css') }}">
+</head>
+<body>
+  <div class="hoja">
+    <header class="cabecera">
+      <p class="cabecera__curso">{{ asignatura }}</p>
+      <p class="cabecera__titulo">
+        <a href="{{ url_for('portada') }}">Cuadernillo de Stack y Arquitecturas</a>
+      </p>
+      <p class="cabecera__autor">{{ estudiante }}</p>
+    </header>
+
+    <main>
+      {% block contenido %}{% endblock %}
+    </main>
+
+    <footer class="colofon">
+      <p>
+        Cuadernillo elaborado por <strong>{{ estudiante }}</strong> para {{ asignatura }}.
+      </p>
+      <p class="colofon__nota">
+        Python · Flask · HTML · CSS — renderizado en el servidor, sin JavaScript.
+      </p>
+    </footer>
+  </div>
+</body>
+</html>

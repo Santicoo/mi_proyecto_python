@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block titulo %}Cuadernillo de Stack y Arquitecturas{% endblock %}
+
+{% block contenido %}
+<article class="portada">
+  <p class="antetitulo">Evaluación práctica</p>
+  <h1 class="portada__titulo">Stack y Arquitecturas<br>de Software</h1>
+  <p class="portada__entrada">
+    Cuestionario de {{ total }} preguntas sobre los estilos arquitectónicos
+    estudiados en el curso y sobre el flujo de trabajo con Git, GitHub y Render.
+    Cada respuesta se comprueba en el servidor y se acompaña de una explicación.
+  </p>
+
+  <div class="ficha">
+    <dl>
+      <dt>Autor</dt><dd>{{ estudiante }}</dd>
+      <dt>Asignatura</dt><dd>{{ asignatura }}</dd>
+      <dt>Stack</dt><dd>Python · Flask · HTML · CSS</dd>
+      <dt>Arquitectura</dt><dd>Monolito modular con núcleo aislado</dd>
+      <dt>Despliegue</dt><dd>Render</dd>
+    </dl>
+  </div>
+
+  <form method="post" action="{{ url_for('iniciar') }}" class="acciones">
+    <button type="submit" class="boton">
+      {% if en_curso %}Comenzar de nuevo{% else %}Comenzar el cuestionario{% endif %}
+    </button>
+    {% if en_curso %}
+    <a class="enlace-boton" href="{{ url_for('pregunta', numero=1) }}">Continuar</a>
+    <a class="enlace-boton" href="{{ url_for('resultado') }}">Ver resultado</a>
+    {% endif %}
+  </form>
+
+  {% if en_curso %}
+  <p class="aviso">Tienes {{ respondidas }} de {{ total }} preguntas respondidas.</p>
+  {% endif %}
+</article>
+
+<hr class="regla">
+
+<section class="indice">
+  <h2 class="titulo-seccion">Índice del cuestionario</h2>
+  <ol class="indice__lista">
+    {% for p in preguntas %}
+    <li class="indice__item">
+      <a href="{{ url_for('pregunta', numero=p.numero) }}">
+        <span class="indice__numero">{{ "%02d"|format(p.numero) }}</span>
+        <span class="indice__tema">{{ p.tema }}</span>
+        <span class="indice__enunciado">{{ p.enunciado }}</span>
+      </a>
+    </li>
+    {% endfor %}
+  </ol>
+</section>
+
+<hr class="regla">
+
+<section class="nota-metodo">
+  <h2 class="titulo-seccion">Sobre esta versión</h2>
+  <p>
+    El cuadernillo no utiliza JavaScript. Cada pregunta es un formulario HTML que
+    se envía al servidor; Flask guarda la respuesta en la sesión y vuelve a
+    dibujar la página con la retroalimentación. El núcleo —el banco de preguntas
+    y las reglas de evaluación— vive en el paquete <code>domain/</code> y no
+    importa Flask, de modo que puede probarse sin levantar un servidor web.
+  </p>
+</section>
+{% endblock %}

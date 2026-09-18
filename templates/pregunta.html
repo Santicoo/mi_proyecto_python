@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block titulo %}Pregunta {{ pregunta.numero }} — Cuadernillo{% endblock %}
+
+{% block contenido %}
+<p class="migas">
+  <a href="{{ url_for('portada') }}">Índice</a>
+  <span class="migas__sep">/</span>
+  {{ pregunta.seccion }}
+  <span class="migas__sep">/</span>
+  Pregunta {{ pregunta.numero }} de {{ total }}
+</p>
+
+<div class="progreso" role="img" aria-label="{{ respondidas }} de {{ total }} preguntas respondidas">
+  <div class="progreso__relleno" style="width: {{ (respondidas / total * 100) | round(0, 'floor') }}%"></div>
+</div>
+
+<article class="pregunta">
+  <p class="antetitulo">{{ pregunta.tema }}</p>
+  <h1 class="pregunta__enunciado">
+    <span class="pregunta__numero">{{ "%02d"|format(pregunta.numero) }}</span>
+    {{ pregunta.enunciado }}
+  </h1>
+
+  <form method="post" action="{{ url_for('responder', numero=pregunta.numero) }}">
+    <ul class="opciones">
+      {% for letra, texto in pregunta.opciones.items() %}
+      {% set clase = '' %}
+      {% if veredicto %}
+        {% if letra == veredicto.correcta %}{% set clase = 'opcion--correcta' %}
+        {% elif letra == elegida %}{% set clase = 'opcion--incorrecta' %}{% endif %}
+      {% endif %}
+      <li class="opcion {{ clase }}">
+        <label>
+          <input type="radio" name="opcion" value="{{ letra }}"
+                 {% if elegida == letra %}checked{% endif %}
+                 {% if veredicto %}disabled{% endif %}>
+          <span class="opcion__letra">{{ letra }}</span>
+          <span class="opcion__texto">{{ texto }}</span>
+          {% if veredicto and letra == veredicto.correcta %}
+          <span class="opcion__marca">respuesta correcta</span>
+          {% elif veredicto and letra == elegida %}
+          <span class="opcion__marca opcion__marca--error">tu respuesta</span>
+          {% endif %}
+        </label>
+      </li>
+      {% endfor %}
+    </ul>
+
+    {% if not veredicto %}
+    <div class="acciones">
+      <button type="submit" class="boton">Comprobar respuesta</button>
+      {% if anterior %}
+      <a class="enlace-boton" href="{{ url_for('pregunta', numero=anterior) }}">Anterior</a>
+      {% endif %}
+    </div>
+    {% endif %}
+  </form>
+
+  {% if veredicto %}
+  <aside class="comentario {% if veredicto.acierto %}comentario--ok{% else %}comentario--error{% endif %}">
+    <p class="comentario__titulo">
+      {% if veredicto.acierto %}
+        Respuesta correcta
+      {% else %}
+        Respuesta incorrecta — la opción correcta era {{ veredicto.correcta }}
+      {% endif %}
+    </p>
+    {% if not veredicto.acierto %}
+    <p class="comentario__correcta">{{ veredicto.texto_correcta }}</p>
+    {% endif %}
+    <p class="comentario__texto">{{ veredicto.retroalimentacion }}</p>
+  </aside>
+
+  <div class="acciones">
+    {% if anterior %}
+    <a class="enlace-boton" href="{{ url_for('pregunta', numero=anterior) }}">Anterior</a>
+    {% endif %}
+    {% if siguiente %}
+    <a class="boton" href="{{ url_for('pregunta', numero=siguiente) }}">Siguiente pregunta</a>
+    {% else %}
+    <a class="boton" href="{{ url_for('resultado') }}">Ver resultado final</a>
+    {% endif %}
+  </div>
+  {% endif %}
+</article>
+{% endblock %}
