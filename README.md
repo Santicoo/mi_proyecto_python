@@ -1,4 +1,4 @@
-# Versión 3 — Editorial / Cuadernillo (renderizado en servidor, sin JavaScript)
+# Editorial / Cuadernillo (renderizado en servidor, sin JavaScript)
 
 Quiz sobre **Stack y Arquitecturas de Software**, construido con Python y Flask.
 
