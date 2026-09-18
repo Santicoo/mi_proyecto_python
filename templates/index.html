@@ -239,6 +239,74 @@
                 font-size: 1.05rem;
             }
         }
+
+        /* --- Sección del estudiante y acceso al quiz --- */
+        .autor-card {
+            margin: 28px auto 0;
+            max-width: 520px;
+            padding: 20px 26px;
+            border-radius: 20px;
+            border: 1px solid var(--card-border);
+            border-left: 4px solid var(--accent-gold);
+            background: rgba(0, 0, 0, 0.18);
+            text-align: left;
+        }
+
+        .autor-card .rol {
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-sub);
+        }
+
+        .autor-card .nombre {
+            font-family: 'Playfair Display', serif;
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--accent-gold);
+            margin: 2px 0;
+        }
+
+        .quiz-cta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 26px;
+        }
+
+        .quiz-cta button,
+        .quiz-cta a {
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 700;
+            padding: 14px 30px;
+            border-radius: 99px;
+            cursor: pointer;
+            text-decoration: none;
+            border: 1px solid var(--card-border);
+            color: var(--primary-light);
+            background: transparent;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .quiz-cta button {
+            background: linear-gradient(135deg, var(--accent-green), var(--accent-sage));
+            color: #0b2b1a;
+            border-color: transparent;
+            box-shadow: 0 8px 20px rgba(82, 183, 136, 0.3);
+        }
+
+        .quiz-cta button:hover,
+        .quiz-cta a:hover {
+            transform: translateY(-2px);
+        }
+
+        .quiz-nota {
+            margin-top: 12px;
+            font-size: 13px;
+            color: var(--text-sub);
+        }
     </style>
 </head>
 
@@ -275,9 +343,26 @@
         </div>
 
         <!-- Título Principal Centrado y Grande -->
-        <h1>¡Bienvenido a la Experiencia Flask!</h1>
+        <h1>Stack y Arquitecturas: pon a prueba lo aprendido</h1>
         <p class="subtitle">Tu aplicación en Python está lista, conectada y lista para florecer en un entorno armónico
             con los colores de la naturaleza.</p>
+
+        <div class="autor-card">
+            <p class="rol">Desarrollado por</p>
+            <p class="nombre">{{ estudiante }}</p>
+            <p class="rol">{{ asignatura }}</p>
+        </div>
+
+        <form class="quiz-cta" method="post" action="{{ url_for('iniciar') }}">
+            <button type="submit">{% if en_curso %}Comenzar de nuevo{% else %}Comenzar el quiz ({{ total }} preguntas){% endif %}</button>
+            {% if en_curso %}
+            <a href="{{ url_for('pregunta', numero=1) }}">Continuar</a>
+            <a href="{{ url_for('resultado') }}">Ver resultado</a>
+            {% endif %}
+        </form>
+        {% if en_curso %}
+        <p class="quiz-nota">Llevas {{ respondidas }} de {{ total }} preguntas respondidas.</p>
+        {% endif %}
 
         <!-- Cuadrícula con SVGs Ilustrativos -->
         <div class="features-grid">
@@ -312,7 +397,7 @@
             </div>
 
         </div>
-        <p align="center">Creado por Feibert Alirio Guzmán Pérez</p>
+        <p align="center">Aplicación base creada por Feibert Alirio Guzmán Pérez · Quiz y rediseño por {{ estudiante }}</p>
     </div>
 
 </body>

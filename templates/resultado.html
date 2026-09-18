@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block titulo %}Resultado — Quiz{% endblock %}
+
+{% block contenido %}
+<p class="migas">
+  <a href="{{ url_for('home') }}">Índice</a>
+  <span class="migas__sep">/</span> Resultado
+</p>
+
+<article class="resultado">
+  <p class="antetitulo">Resultado final</p>
+  <p class="resultado__cifra">
+    {{ resumen.aciertos }}<span class="resultado__total">/{{ resumen.total }}</span>
+  </p>
+  <p class="resultado__pct">{{ resumen.porcentaje }}% de aciertos</p>
+  <p class="resultado__mensaje">{{ resumen.mensaje }}</p>
+
+  {% if not resumen.completo %}
+  <p class="aviso">
+    Aún quedan preguntas sin responder; las no respondidas cuentan como incorrectas.
+  </p>
+  {% endif %}
+</article>
+
+<hr class="regla">
+
+<section>
+  <h2 class="titulo-seccion">Revisión del cuestionario</h2>
+  <ol class="revision">
+    {% for item in resumen.detalle %}
+    <li class="revision__item {% if item.acierto %}revision__item--ok{% else %}revision__item--error{% endif %}">
+      <p class="revision__cabecera">
+        <span class="revision__numero">{{ "%02d"|format(item.numero) }}</span>
+        <span class="revision__tema">{{ item.tema }}</span>
+        <span class="revision__estado">
+          {% if item.acierto %}Correcta{% elif item.respondida %}Incorrecta{% else %}Sin responder{% endif %}
+        </span>
+      </p>
+      <p class="revision__enunciado">{{ item.enunciado }}</p>
+      <p class="revision__detalle">
+        {% if item.acierto %}
+          Respondiste <strong>{{ item.elegida }}</strong>.
+        {% elif item.respondida %}
+          Respondiste <strong>{{ item.elegida }}</strong>; la correcta era
+          <strong>{{ item.correcta }}</strong> — {{ item.texto_correcta }}
+        {% else %}
+          La correcta era <strong>{{ item.correcta }}</strong> — {{ item.texto_correcta }}
+        {% endif %}
+        <a class="revision__enlace" href="{{ url_for('pregunta', numero=item.numero) }}">revisar</a>
+      </p>
+    </li>
+    {% endfor %}
+  </ol>
+</section>
+
+<form method="post" action="{{ url_for('reiniciar') }}" class="acciones">
+  <button type="submit" class="boton">Reintentar el cuestionario</button>
+  <a class="enlace-boton" href="{{ url_for('home') }}">Volver al índice</a>
+</form>
+{% endblock %}

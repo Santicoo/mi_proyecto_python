@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block titulo %}Quiz de Arquitecturas{% endblock %} | Flask App</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Playfair+Display:ital,wght@0,600;0,800;1,400&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/quiz.css') }}">
+</head>
+
+<body>
+    <div class="hoja">
+        <header class="cabecera">
+            <p class="cabecera__curso">{{ asignatura }}</p>
+            <p class="cabecera__titulo">
+                <a href="{{ url_for('home') }}">Quiz de Stack y Arquitecturas</a>
+            </p>
+            <p class="cabecera__autor">{{ estudiante }}</p>
+        </header>
+
+        <main>
+            {% block contenido %}{% endblock %}
+        </main>
+
+        <footer class="colofon">
+            <p>Quiz elaborado por <strong>{{ estudiante }}</strong> para {{ asignatura }}.</p>
+            <p class="colofon__nota">Python · Flask · HTML · CSS</p>
+        </footer>
+    </div>
+</body>
+
+</html>
